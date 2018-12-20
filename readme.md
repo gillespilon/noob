@@ -1,17 +1,12 @@
-[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/10257.svg)](https://scan.coverity.com/projects/gillespilon-process_analysis)
-[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://travis-ci.org/gillespilon/process_analysis)
-
-# Process analysis
+# Python for Noobs
 
 ## In brevi
 
-The purpose of this document is to analyze many process variables quickly and save all results.
-
-This Jupyter Notebook creates box plots, scatter plots, and XmR control charts.
+This directory contains many notebooks and scripts to help my friends and coworkers learn python sufficiently to do analytics.
 
 ## Data
 
-Placeholder. Provide URL for data file.
+TBD
 
 ## Methodology
 
@@ -19,4 +14,4 @@ TBD
 
 ## References
 
-TBD. Add references from .ipynb file.
+TBD
