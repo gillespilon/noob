@@ -8,11 +8,16 @@ plots of float and integer columns.
 
 from shutil import rmtree
 from pathlib import Path
+from multiprocessing import Pool
 
 
 import pandas as pd
 import matplotlib.axes as axes
 import matplotlib.pyplot as plt
+
+
+def read_data():
+    pass
 
 
 def despine(ax: axes.Axes) -> None:
@@ -43,6 +48,14 @@ def plot_scatter(column_name: str) -> None:
     ax.figure.savefig(f'graphics/scatter_plot_{column_name}.png',
                       format='png')
     plt.close('all')
+
+
+def plot_box_plot(column_name: str) -> None:
+    pass
+
+
+def plot_histogram(column_name: str) -> None:
+    pass
 
 
 df = pd.read_csv('data/norfolk.csv',
@@ -82,11 +95,11 @@ except FileNotFoundError:
     pass
 Path('graphics').mkdir(parents=True, exist_ok=True)
 
-for column_name in df.columns:
-    if df[column_name].dtype == float:
-        plot_scatter(column_name)
-    else:
-        pass
+# for column_name in df.columns:
+#     if df[column_name].dtype == float:
+#         plot_scatter(column_name)
+#     else:
+#         pass
 # plt.close('all')
 
 for column_name in df.columns:
@@ -111,3 +124,10 @@ for column_name in df.columns:
     else:
         pass
 plt.close('all')
+
+with Pool() as pool:
+    for _ in pool.imap_unordered(plot_scatter, not_null_floats):
+        pass
+
+if __name__ == '__main__':
+    pass
