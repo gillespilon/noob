@@ -1,7 +1,15 @@
 #! /usr/bin/env python3
 
+'''
+This script reads a raw data file, creates box plots, histograms, and scatter
+plots of float and integer columns.
+'''
+
+
 from shutil import rmtree
 from pathlib import Path
+
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
