@@ -11,7 +11,20 @@ from pathlib import Path
 
 
 import pandas as pd
+import matplotlib.axes as axes
 import matplotlib.pyplot as plt
+
+
+def despine(ax: axes.Axes) -> None:
+    '''
+    Remove the top and right spines of a graph.
+
+    Used to enforce standard and *correct* style. There is only one x, and one
+    y axis, left and bottom, therefore there should only be these axes.
+    '''
+    for spine in 'right', 'top':
+        ax.spines[spine].set_color('none')
+
 
 df = pd.read_csv('data/norfolk.csv',
                  parse_dates=True,
@@ -48,6 +61,7 @@ for column_name in df.columns:
                           legend=False,
                           style='.')
         ax.set_ylabel(column_name)
+        despine(ax)
         ax.figure.savefig(f'graphics/scatter_plot_{column_name}.png',
                           format='png')
     else:
@@ -59,6 +73,7 @@ for column_name in df.columns:
         ax = df.plot.box(y=column_name,
                          notch=True)
         ax.set_ylabel(column_name)
+        despine(ax)
         ax.figure.savefig(f'graphics/box_plot_{column_name}.png', format='png')
     else:
         pass
@@ -69,6 +84,7 @@ for column_name in df.columns:
         ax = df.plot.hist(y=column_name,
                           legend=False)
         ax.set_xlabel(column_name)
+        despine(ax)
         ax.figure.savefig(f'graphics/histogram_{column_name}.png',
                           format='png')
     else:
