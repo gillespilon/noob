@@ -26,6 +26,25 @@ def despine(ax: axes.Axes) -> None:
         ax.spines[spine].set_color('none')
 
 
+def plot_scatter(column_name: str) -> None:
+    '''
+    Scatter plot of column_name data versu index.
+    '''
+    ax = df.plot.line(y=column_name,
+                      legend=False,
+                      style='.',
+                      figsize=(9, 6))
+    ax.set_ylabel(column_name,
+                  fontweight='bold')
+#     ax.set_title(f'{column_name} versus index',
+#                  fontweight='bold')
+#     ax.autoscale(tight=False)
+    despine(ax)
+    ax.figure.savefig(f'graphics/scatter_plot_{column_name}.png',
+                      format='png')
+    plt.close('all')
+
+
 df = pd.read_csv('data/norfolk.csv',
                  parse_dates=True,
                  index_col='LAB_BOARD_DAT_COD')
@@ -35,6 +54,14 @@ print(df.index)
 
 df = df.dropna(how='all', axis=1)
 df = df.dropna(how='all', axis=0)
+
+not_null_floats = sorted({
+    column_name
+    for column_name
+    in df.columns
+    if (df[column_name].dtype in (float, int) and not
+        df[column_name].isnull().all())
+})
 
 pd.DataFrame(list(df)).to_csv('data/column_names.csv',
                               header=False,
@@ -57,16 +84,10 @@ Path('graphics').mkdir(parents=True, exist_ok=True)
 
 for column_name in df.columns:
     if df[column_name].dtype == float:
-        ax = df.plot.line(y=column_name,
-                          legend=False,
-                          style='.')
-        ax.set_ylabel(column_name)
-        despine(ax)
-        ax.figure.savefig(f'graphics/scatter_plot_{column_name}.png',
-                          format='png')
+        plot_scatter(column_name)
     else:
         pass
-plt.close('all')
+# plt.close('all')
 
 for column_name in df.columns:
     if df[column_name].dtype == float:
