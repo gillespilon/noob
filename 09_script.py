@@ -17,7 +17,40 @@ import matplotlib.pyplot as plt
 
 
 def read_data():
-    pass
+    df = pd.read_csv('data/norfolk.csv',
+                     parse_dates=True,
+                     index_col='LAB_BOARD_DAT_COD')
+    print(df.shape)
+    print(df.size)
+    print(df.index)
+    print(df.dtypes)
+    for column_name in df.columns:
+        if df[column_name].dtype == object:
+            print(column_name, df[df[column_name].
+                                  str.contains('[a-z]',
+                                  na=False)][column_name].unique())
+    try:
+        rmtree('graphics')
+    except FileNotFoundError:
+        pass
+    Path('graphics').mkdir(parents=True, exist_ok=True)
+    return df
+
+
+def prepare_data(df):
+    df = df.dropna(how='all', axis=1)
+    df = df.dropna(how='all', axis=0)
+    pd.DataFrame(list(df)).to_csv('data/column_names.csv',
+                                  header=False,
+                                  index=False)
+    not_null = sorted({
+        column_name
+        for column_name
+        in df.columns
+        if (df[column_name].dtype in (float, int) and not
+            df[column_name].isnull().all())
+    })
+    return df, not_null
 
 
 def despine(ax: axes.Axes) -> None:
@@ -58,76 +91,40 @@ def plot_histogram(column_name: str) -> None:
     pass
 
 
-df = pd.read_csv('data/norfolk.csv',
-                 parse_dates=True,
-                 index_col='LAB_BOARD_DAT_COD')
-print(df.shape)
-print(df.size)
-print(df.index)
-
-df = df.dropna(how='all', axis=1)
-df = df.dropna(how='all', axis=0)
-
-not_null_floats = sorted({
-    column_name
-    for column_name
-    in df.columns
-    if (df[column_name].dtype in (float, int) and not
-        df[column_name].isnull().all())
-})
-
-pd.DataFrame(list(df)).to_csv('data/column_names.csv',
-                              header=False,
-                              index=False)
-
-print(df.dtypes)
-print(df.shape)
-
-for column_name in df.columns:
-    if df[column_name].dtype == object:
-        print(column_name, df[df[column_name].
-                              str.contains('[a-z]',
-                              na=False)][column_name].unique())
-
-try:
-    rmtree('graphics')
-except FileNotFoundError:
-    pass
-Path('graphics').mkdir(parents=True, exist_ok=True)
-
-# for column_name in df.columns:
-#     if df[column_name].dtype == float:
-#         plot_scatter(column_name)
-#     else:
-#         pass
-# plt.close('all')
-
-for column_name in df.columns:
-    if df[column_name].dtype == float:
-        ax = df.plot.box(y=column_name,
-                         notch=True)
-        ax.set_ylabel(column_name)
-        despine(ax)
-        ax.figure.savefig(f'graphics/box_plot_{column_name}.png', format='png')
-    else:
-        pass
-plt.close('all')
-
-for column_name in df.columns:
-    if df[column_name].dtype == float:
-        ax = df.plot.hist(y=column_name,
-                          legend=False)
-        ax.set_xlabel(column_name)
-        despine(ax)
-        ax.figure.savefig(f'graphics/histogram_{column_name}.png',
-                          format='png')
-    else:
-        pass
-plt.close('all')
-
-with Pool() as pool:
-    for _ in pool.imap_unordered(plot_scatter, not_null_floats):
-        pass
-
 if __name__ == '__main__':
-    pass
+    df = read_data()
+    df, not_null = prepare_data(df)
+    # for column_name in df.columns:
+    #     if df[column_name].dtype == float:
+    #         plot_scatter(column_name)
+    #     else:
+    #         pass
+    # plt.close('all')
+
+    for column_name in df.columns:
+        if df[column_name].dtype == float:
+            ax = df.plot.box(y=column_name,
+                             notch=True)
+            ax.set_ylabel(column_name)
+            despine(ax)
+            ax.figure.savefig(f'graphics/box_plot_{column_name}.png',
+                              format='png')
+        else:
+            pass
+    plt.close('all')
+
+    for column_name in df.columns:
+        if df[column_name].dtype == float:
+            ax = df.plot.hist(y=column_name,
+                              legend=False)
+            ax.set_xlabel(column_name)
+            despine(ax)
+            ax.figure.savefig(f'graphics/histogram_{column_name}.png',
+                              format='png')
+        else:
+            pass
+    plt.close('all')
+
+    with Pool() as pool:
+        for _ in pool.imap_unordered(plot_scatter, not_null):
+            pass
