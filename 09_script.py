@@ -3,6 +3,10 @@
 '''
 This script reads a raw data file, creates box plots, histograms, and scatter
 plots of float and integer columns.
+
+time -f '%e' ./09_script.py > 09_script.txt
+./09_script.py > 09_script.txt
+./09_script.py | tee 09_script.txt
 '''
 
 
