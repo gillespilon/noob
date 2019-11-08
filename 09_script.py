@@ -61,7 +61,7 @@ def despine(ax: axes.Axes) -> None:
     y axis, left and bottom, therefore there should only be these axes.
     '''
     for spine in 'right', 'top':
-        ax.spines[spine].set_color('none')
+        ax.spines[spine].set_visible(False)
 
 
 def plot_scatter(column_name: str) -> None:
