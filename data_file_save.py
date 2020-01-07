@@ -4,7 +4,7 @@
 # # Saving a data file
 
 # # Document
-# 
+#
 # <table align="left">
 #     <tr>
 #         <th class="text-align:left">Title</th>
@@ -41,7 +41,7 @@
 # </table>
 
 # # Ideas
-# 
+#
 # - Save a dataframe to a csv file.
 # - Save a dataframe to an Excel file with one worksheet.
 # - Save several dataframe to an Excel file with multiple worksheets.
