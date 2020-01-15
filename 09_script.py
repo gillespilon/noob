@@ -61,8 +61,7 @@ def despine(ax: axes.Axes) -> None:
     '''
     Remove the top and right spines of a graph.
 
-    Used to enforce standard and *correct* style. There is only one x, and one
-    y axis, left and bottom, therefore there should only be these axes.
+    There is only one x axis, on the bottom, and one y axis, on the left.
     '''
     for spine in 'right', 'top':
         ax.spines[spine].set_visible(False)
@@ -88,7 +87,13 @@ def plot_scatter(column_name: str) -> None:
 
 
 def plot_box_plot(column_name: str) -> None:
-    pass
+    ax = df.plot.box(y=column_name,
+                     notch=True)
+    ax.set_ylabel(column_name)
+    despine(ax)
+    ax.figure.savefig(f'graphics/box_plot_{column_name}.png',
+                      format='png')
+    plt.close('all')
 
 
 def plot_histogram(column_name: str) -> None:
@@ -105,17 +110,17 @@ if __name__ == '__main__':
     #         pass
     # plt.close('all')
 
-    for column_name in df.columns:
-        if df[column_name].dtype == float:
-            ax = df.plot.box(y=column_name,
-                             notch=True)
-            ax.set_ylabel(column_name)
-            despine(ax)
-            ax.figure.savefig(f'graphics/box_plot_{column_name}.png',
-                              format='png')
-        else:
-            pass
-    plt.close('all')
+#     for column_name in df.columns:
+#         if df[column_name].dtype == float:
+#             ax = df.plot.box(y=column_name,
+#                              notch=True)
+#             ax.set_ylabel(column_name)
+#             despine(ax)
+#             ax.figure.savefig(f'graphics/box_plot_{column_name}.png',
+#                               format='png')
+#         else:
+#             pass
+#     plt.close('all')
 
     for column_name in df.columns:
         if df[column_name].dtype == float:
@@ -131,4 +136,6 @@ if __name__ == '__main__':
 
     with Pool() as pool:
         for _ in pool.imap_unordered(plot_scatter, not_null):
+            pass
+        for _ in pool.imap_unordered(plot_box_plot, not_null):
             pass
