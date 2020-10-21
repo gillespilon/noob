@@ -87,8 +87,10 @@ def plot_scatter(column_name: str) -> None:
 #                  fontweight='bold')
 #     ax.autoscale(tight=False)
     despine(ax)
-    ax.figure.savefig(f'graphics/scatter_plot_{column_name}.png',
-                      format='png')
+    ax.figure.savefig(
+        fname=f'graphics/scatter_plot_{column_name}.png',
+        format='png'
+    )
     plt.close('all')
 
 
@@ -97,8 +99,10 @@ def plot_box_plot(column_name: str) -> None:
                      notch=True)
     ax.set_ylabel(column_name)
     despine(ax)
-    ax.figure.savefig(f'graphics/box_plot_{column_name}.png',
-                      format='png')
+    ax.figure.savefig(
+        fname=f'graphics/box_plot_{column_name}.png',
+        format='png'
+    )
     plt.close('all')
 
 
@@ -122,8 +126,10 @@ if __name__ == '__main__':
 #                              notch=True)
 #             ax.set_ylabel(column_name)
 #             despine(ax)
-#             ax.figure.savefig(f'graphics/box_plot_{column_name}.png',
-#                               format='png')
+#             ax.figure.savefig(
+#                 fname=f'graphics/box_plot_{column_name}.png',
+#                 format='png'
+#             )
 #         else:
 #             pass
 #     plt.close('all')
@@ -134,8 +140,10 @@ if __name__ == '__main__':
                               legend=False)
             ax.set_xlabel(column_name)
             despine(ax)
-            ax.figure.savefig(f'graphics/histogram_{column_name}.png',
-                              format='png')
+            ax.figure.savefig(
+                fname=f'graphics/histogram_{column_name}.png',
+                format='png'
+            )
         else:
             pass
     plt.close('all')
