@@ -57,22 +57,6 @@ def prepare_data(df):
     return df, not_null
 
 
-def despine(ax: axes.Axes) -> None:
-    """
-    Remove the top and right spines of a graph.
-
-    Parameters
-    ----------
-    ax : axes.Axes
-
-    Example
-    -------
-    >>> despine(ax)
-    """
-    for spine in 'right', 'top':
-        ax.spines[spine].set_visible(False)
-
-
 def plot_scatter(column_name: str) -> None:
     '''
     Scatter plot of column_name data versu index.
@@ -86,7 +70,7 @@ def plot_scatter(column_name: str) -> None:
 #     ax.set_title(f'{column_name} versus index',
 #                  fontweight='bold')
 #     ax.autoscale(tight=False)
-    despine(ax)
+    ds.despine(ax)
     ax.figure.savefig(
         fname=f'graphics/scatter_plot_{column_name}.png',
         format='png'
@@ -98,7 +82,7 @@ def plot_box_plot(column_name: str) -> None:
     ax = df.plot.box(y=column_name,
                      notch=True)
     ax.set_ylabel(column_name)
-    despine(ax)
+    ds.despine(ax)
     ax.figure.savefig(
         fname=f'graphics/box_plot_{column_name}.png',
         format='png'
@@ -125,7 +109,7 @@ if __name__ == '__main__':
 #             ax = df.plot.box(y=column_name,
 #                              notch=True)
 #             ax.set_ylabel(column_name)
-#             despine(ax)
+#             ds.despine(ax)
 #             ax.figure.savefig(
 #                 fname=f'graphics/box_plot_{column_name}.png',
 #                 format='png'
@@ -139,7 +123,7 @@ if __name__ == '__main__':
             ax = df.plot.hist(y=column_name,
                               legend=False)
             ax.set_xlabel(column_name)
-            despine(ax)
+            ds.despine(ax)
             ax.figure.savefig(
                 fname=f'graphics/histogram_{column_name}.png',
                 format='png'
