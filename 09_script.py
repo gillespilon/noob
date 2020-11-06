@@ -122,7 +122,7 @@ if __name__ == '__main__':
         if df[column_name].dtype == float:
             ax = df.plot.hist(y=column_name,
                               legend=False)
-            ax.set_xlabel(column_name)
+            ax.set_xlabel(xlabel=column_name)
             ds.despine(ax)
             ax.figure.savefig(
                 fname=f'graphics/histogram_{column_name}.png',
