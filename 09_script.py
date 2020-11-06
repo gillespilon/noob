@@ -65,8 +65,10 @@ def plot_scatter(column_name: str) -> None:
                       legend=False,
                       style='.',
                       figsize=(9, 6))
-    ax.set_ylabel(column_name,
-                  fontweight='bold')
+    ax.set_ylabel(
+        ylabel=column_name,
+        fontweight='bold'
+    )
 #     ax.set_title(f'{column_name} versus index',
 #                  fontweight='bold')
 #     ax.autoscale(tight=False)
@@ -81,7 +83,7 @@ def plot_scatter(column_name: str) -> None:
 def plot_box_plot(column_name: str) -> None:
     ax = df.plot.box(y=column_name,
                      notch=True)
-    ax.set_ylabel(column_name)
+    ax.set_ylabel(ylabel=column_name)
     ds.despine(ax)
     ax.figure.savefig(
         fname=f'graphics/box_plot_{column_name}.png',
@@ -108,7 +110,7 @@ if __name__ == '__main__':
 #         if df[column_name].dtype == float:
 #             ax = df.plot.box(y=column_name,
 #                              notch=True)
-#             ax.set_ylabel(column_name)
+#             ax.set_ylabel(ylabel=column_name)
 #             ds.despine(ax)
 #             ax.figure.savefig(
 #                 fname=f'graphics/box_plot_{column_name}.png',
