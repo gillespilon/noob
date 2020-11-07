@@ -69,8 +69,10 @@ def plot_scatter(column_name: str) -> None:
         ylabel=column_name,
         fontweight='bold'
     )
-#     ax.set_title(f'{column_name} versus index',
-#                  fontweight='bold')
+#     ax.set_title(
+#         label=f'{column_name} versus index',
+#         fontweight='bold'
+#     )
 #     ax.autoscale(tight=False)
     ds.despine(ax)
     ax.figure.savefig(
