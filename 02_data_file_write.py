@@ -1,8 +1,13 @@
 #! /usr/bin/env python3
 """
-Write a dataframe to a csv
-Write a dataframe to an Excel workbook with one worksheet
-Write several dataframs to an Excel workbook as several worksheets
+- Create three dataframes
+- Write one dataframe to a csv file
+- Read a csv file and correct dtypes
+- Write three dataframes to three worksheets to an Excel workbook
+- Read an Excel workbook with three worksheets and correct dtypes
+- Read an Excel workbook with data and formulae in three worksheets
+
+./02_data_file_write.py
 """
 
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -12,63 +17,210 @@ import datasense as ds
 import pandas as pd
 
 
-df = ds.read_file(
-    file_name='data/cloquet_two_weeks_60_min.csv'
-)
-print(df.head())
-print(df.dtypes)
-ds.save_file(
-    df=df,
-    file_name='data/just_a_test.csv'
-)
-just_a_test = ds.read_file(
-    file_name='data/just_a_test.csv'
-)
-print(just_a_test.head())
-df2 = ds.read_file(
-    file_name='data/cloquet_two_weeks_30_min.csv'
-)
-print(df2.head())
-df3 = ds.read_file(
-    file_name='data/cloquet_two_weeks_15_min.csv'
-)
-print(df3.head())
-wb = Workbook()
-ws = wb.active
-ws.title = 'sheet_one'
-for row in dataframe_to_rows(
-    df=df,
-    index=False,
-    header=True
-):
-    ws.append(row)
-wb.save(filename='data/even_another_file.xlsx')
-ws2 = wb.create_sheet(
-    title='sheet_two',
-    index=1
-)
-for row in dataframe_to_rows(
-    df=df2,
-    index=False,
-    header=True
-):
-    ws2.append(row)
-ws3 = wb.create_sheet(
-    title='sheet_three',
-    index=2
-)
-for row in dataframe_to_rows(
-    df=df3,
-    index=False,
-    header=True
-):
-    ws3.append(row)
-wb.save(filename='data/even_another_file.xlsx')
-wb = load_workbook(filename='data/even_another_file.xlsx')
-print(wb.sheetnames)
-df_one = pd.DataFrame(wb['sheet_one'].values)
-print(df_one.head())
-df_two = pd.DataFrame(wb['sheet_two'].values)
-print(df_two.head())
-df_three = pd.DataFrame(wb['sheet_three'].values)
-print(df_three.head())
+pd.options.display.width = 150
+output_url = '02_data_file_write.html'
+header_title = 'Writing a data file'
+header_id = 'writing-data-file'
+
+
+def main():
+    original_stdout = ds.html_begin(
+        output_url=output_url,
+        header_title=header_title,
+        header_id=header_id
+    )
+    print('Create three dataframes')
+    print()
+    size = 4
+    df1 = ds.create_dataframe(size=size)
+    df2 = ds.create_dataframe(size=size)
+    df3 = ds.create_dataframe(size=size)
+    print('df1')
+    print(df1.head(2))
+    print()
+    print(df1.dtypes)
+    print()
+    print('df2')
+    print(df2.head(2))
+    print()
+    print(df2.dtypes)
+    print()
+    print('df3')
+    print(df3.head(2))
+    print()
+    print(df3.dtypes)
+    print()
+    print('Write one dataframe to a csv file')
+    print()
+    ds.save_file(
+        df=df1,
+        file_name='data/just_a_test.csv'
+    )
+    print('Read a csv file and do not correct dtypes')
+    print()
+    just_a_test = ds.read_file(
+        file_name='data/just_a_test.csv'
+    )
+    print(just_a_test.head(2))
+    print()
+    print(just_a_test.dtypes)
+    print()
+    print('Read a csv file and correct dtypes')
+    print()
+    convert_dict = {
+        'a': 'float64',
+        'b': 'boolean',
+        'c': 'category',
+        'i': 'float64',
+        'r': 'str',
+        's': 'str',
+        'x': 'float64',
+        'y': 'Int64',
+        'z': 'float64'
+    }
+    parse_dates = ['t', 'u']
+    time_delta_columns = ['d']
+    just_a_test = ds.read_file(
+        file_name='data/just_a_test.csv',
+        dtype=convert_dict,
+        parse_dates=parse_dates,
+        time_delta_columns=time_delta_columns
+    )
+    print(just_a_test.head(2))
+    print()
+    print(just_a_test.dtypes)
+    print()
+    print('Write three dataframes to three worksheets to an Excel workbook')
+    print()
+    path = 'data/even_another_file.xlsx'
+    engine = 'openpyxl'
+    with pd.ExcelWriter(path=path, engine=engine) as writer:
+        df1.to_excel(
+            excel_writer=writer,
+            sheet_name='sheet_one',
+            index=False
+        )
+        df2.to_excel(
+            excel_writer=writer,
+            sheet_name='sheet_two',
+            index=False
+        )
+        df3.to_excel(
+            excel_writer=writer,
+            sheet_name='sheet_three',
+            index=False
+        )
+    writer.save()
+    print('Read an Excel workbook with three worksheets and correct dtypes')
+    print()
+    print('openpyxl')
+    print()
+    wb1 = load_workbook(filename='data/even_another_file.xlsx')
+    print(wb1.sheetnames)
+    print()
+    wb1ws1 = wb1['sheet_one']
+    from itertools import islice
+    data = wb1ws1.values
+    cols = next(data)[:]
+    data = list(data)
+    # idx = [row[0] for row in data]
+    data = (islice(row, None) for row in data)
+    wb1df1 = pd.DataFrame(data, columns=cols)
+    print(wb1df1.head(2))
+    print()
+    print(wb1df1.dtypes)
+    print()
+    wb1df1 = wb1df1.astype(convert_dict)
+    for column in time_delta_columns:
+        wb1df1[column] = pd.to_timedelta(wb1df1[column])
+    wb1df1[parse_dates] = wb1df1[parse_dates].astype(dtype='datetime64[ns]')
+    print(wb1df1.dtypes)
+    print()
+    wb1ws2 = wb1['sheet_two']
+    from itertools import islice
+    data = wb1ws2.values
+    cols = next(data)[:]
+    data = list(data)
+    # idx = [row[0] for row in data]
+    data = (islice(row, None) for row in data)
+    wb1df2 = pd.DataFrame(data, columns=cols)
+    print(wb1df2.head(2))
+    print()
+    print(wb1df2.dtypes)
+    print()
+    wb1df2 = wb1df2.astype(convert_dict)
+    for column in time_delta_columns:
+        wb1df2[column] = pd.to_timedelta(wb1df2[column])
+    wb1df2[parse_dates] = wb1df2[parse_dates].astype(dtype='datetime64[ns]')
+    print(wb1df2.dtypes)
+    print()
+    wb1ws3 = wb1['sheet_three']
+    from itertools import islice
+    data = wb1ws3.values
+    cols = next(data)[:]
+    data = list(data)
+    # idx = [row[0] for row in data]
+    data = (islice(row, None) for row in data)
+    wb1df3 = pd.DataFrame(data, columns=cols)
+    print(wb1df3.head(2))
+    print()
+    print(wb1df3.dtypes)
+    print()
+    wb1df3 = wb1df3.astype(convert_dict)
+    for column in time_delta_columns:
+        wb1df3[column] = pd.to_timedelta(wb1df3[column])
+    wb1df3[parse_dates] = wb1df3[parse_dates].astype(dtype='datetime64[ns]')
+    print(wb1df3.dtypes)
+    print()
+    print('pd.read_excel')
+    print()
+    wb2 = pd.read_excel(
+        io=path,
+        sheet_name=None,
+        engine='openpyxl'
+    )
+    print(wb2)
+    print()
+    print(wb2.keys())
+    print()
+    wb2df1 = wb2['sheet_one']
+    print(wb2df1.head(2))
+    print()
+    print(wb2df1.dtypes)
+    print()
+    wb2df1 = wb2df1.astype(convert_dict)
+    for column in time_delta_columns:
+        wb2df1[column] = pd.to_timedelta(wb2df1[column])
+    wb2df1[parse_dates] = wb2df1[parse_dates].astype(dtype='datetime64[ns]')
+    print(wb2df1.dtypes)
+    print()
+    wb2df2 = wb2['sheet_two']
+    print(wb2df2.head(2))
+    print()
+    print(wb2df2.dtypes)
+    print()
+    wb2df2 = wb2df1.astype(convert_dict)
+    for column in time_delta_columns:
+        wb2df2[column] = pd.to_timedelta(wb2df2[column])
+    wb2df2[parse_dates] = wb2df2[parse_dates].astype(dtype='datetime64[ns]')
+    print(wb2df2.dtypes)
+    print()
+    wb2df3 = wb2['sheet_three']
+    print(wb2df3.head(2))
+    print()
+    print(wb2df3.dtypes)
+    print()
+    wb2df3 = wb2df3.astype(convert_dict)
+    for column in time_delta_columns:
+        wb2df3[column] = pd.to_timedelta(wb2df3[column])
+    wb2df3[parse_dates] = wb2df3[parse_dates].astype(dtype='datetime64[ns]')
+    print(wb2df3.dtypes)
+    print()
+    ds.html_end(
+        original_stdout=original_stdout,
+        output_url=output_url
+    )
+
+
+if __name__ == '__main__':
+    main()
