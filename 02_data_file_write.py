@@ -216,6 +216,100 @@ def main():
     wb2df3[parse_dates] = wb2df3[parse_dates].astype(dtype='datetime64[ns]')
     print(wb2df3.dtypes)
     print()
+    print('Read an Excel workbook with data and formulae in three worksheets')
+    print()
+    print('openpyxl')
+    print()
+    wb3 = load_workbook(filename='data/file_with_formulae.xlsx')
+    print(wb3.sheetnames)
+    print()
+    wb3s1 = wb3['sheet_calcs_1']
+    wb3s1['C1'] = 'square_root'
+    for row in range(2, 9):
+        wb3s1[f'C{row}'] = f'=B{row}^0.5'
+    from itertools import islice
+    data = wb3s1.values
+    cols = next(data)[:]
+    data = list(data)
+    # idx = [row[0] for row in data]
+    data = (islice(row, None) for row in data)
+    wb3df1 = pd.DataFrame(data, columns=cols)
+    print(wb3df1)
+    print()
+    print(wb3df1.dtypes)
+    print()
+    wb3s2 = wb3['sheet_calcs_2']
+    wb3s2['C1'] = 'cube_root'
+    for row in range(2, 9):
+        wb3s2[f'C{row}'] = f'=B{row}^(1/3)'
+    from itertools import islice
+    data = wb3s2.values
+    cols = next(data)[:]
+    data = list(data)
+    # idx = [row[0] for row in data]
+    data = (islice(row, None) for row in data)
+    wb3df2 = pd.DataFrame(data, columns=cols)
+    print(wb3df2)
+    print()
+    print(wb3df2.dtypes)
+    print()
+    wb3s3 = wb3['sheet_calcs_3']
+    wb3s3['C1'] = 'fourth_root'
+    for row in range(2, 9):
+        wb3s3[f'C{row}'] = f'=B{row}^(1/4)'
+    from itertools import islice
+    data = wb3s3.values
+    cols = next(data)[:]
+    data = list(data)
+    # idx = [row[0] for row in data]
+    data = (islice(row, None) for row in data)
+    wb3df3 = pd.DataFrame(data, columns=cols)
+    print(wb3df3)
+    print()
+    print(wb3df3.dtypes)
+    print()
+    path = 'data/file_with_formulae_plus.xlsx'
+    engine = 'openpyxl'
+    with pd.ExcelWriter(path=path, engine=engine) as writer:
+        wb3df1.to_excel(
+            excel_writer=writer,
+            sheet_name='sheet_one',
+            index=False
+        )
+        wb3df2.to_excel(
+            excel_writer=writer,
+            sheet_name='sheet_two',
+            index=False
+        )
+        wb3df3.to_excel(
+            excel_writer=writer,
+            sheet_name='sheet_three',
+            index=False
+        )
+    writer.save()
+    print('pd.read_excel')
+    print()
+    wb4 = pd.read_excel(
+        io='data/file_with_formulae.xlsx',
+        sheet_name=None,
+        engine='openpyxl'
+    )
+    print(wb4.keys())
+    print()
+    wb4s1 = wb4['sheet_calcs_1']
+    print(wb4s1)
+    print()
+    print(wb4s1.dtypes)
+    print()
+    wb4s2 = wb4['sheet_calcs_2']
+    print(wb4s2)
+    print()
+    print(wb4s2.dtypes)
+    print()
+    wb4s3 = wb4['sheet_calcs_3']
+    print(wb4s3)
+    print()
+    print(wb4s3.dtypes)
     ds.html_end(
         original_stdout=original_stdout,
         output_url=output_url
