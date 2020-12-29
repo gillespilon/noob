@@ -30,6 +30,7 @@ def main():
         header_id=header_id
     )
     print('Create three dataframes')
+    print()
     size = 4
     df1 = ds.create_dataframe(size=size)
     df2 = ds.create_dataframe(size=size)
@@ -50,14 +51,15 @@ def main():
     print(df3.dtypes)
     print()
     print('Write one dataframe to a csv file')
+    print()
     ds.save_file(
         df=df1,
         file_name='data/just_a_test.csv'
     )
     print('Saved csv file to data/just_a_test.csv')
     print()
-    print('Read a csv file')
-    print('Do not correct dtypes')
+    print('Read a csv file and do not correct dtypes')
+    print()
     just_a_test = ds.read_file(
         file_name='data/just_a_test.csv'
     )
@@ -65,8 +67,8 @@ def main():
     print()
     print(just_a_test.dtypes)
     print()
-    print('Read a csv file')
-    print('Correct dtypes')
+    print('Read a csv file and correct dtypes')
+    print()
     convert_dict = {
         'a': 'float64',
         'b': 'boolean',
@@ -91,6 +93,7 @@ def main():
     print(just_a_test.dtypes)
     print()
     print('Write three dataframes to three worksheets to an Excel workbook')
+    print()
     path = 'data/even_another_file.xlsx'
     engine = 'openpyxl'
     with pd.ExcelWriter(path=path, engine=engine) as writer:
@@ -113,7 +116,9 @@ def main():
     print('Saved xlsx file to data/event_another_file.xlsx')
     print()
     print('Read an Excel workbook with three worksheets and correct dtypes')
+    print()
     print('openpyxl')
+    print()
     wb1 = load_workbook(filename='data/even_another_file.xlsx')
     print(wb1.sheetnames)
     print()
@@ -172,6 +177,7 @@ def main():
     print(wb1df3.dtypes)
     print()
     print('pd.read_excel')
+    print()
     wb2 = pd.read_excel(
         io=path,
         sheet_name=None,
@@ -215,9 +221,12 @@ def main():
     print(wb2df3.dtypes)
     print()
     print('Read an Excel workbook with data and formulae in three worksheets')
+    print()
     print('openpyxl')
+    print()
     wb3 = load_workbook(filename='data/file_with_formulae.xlsx')
     print(wb3.sheetnames)
+    print()
     print('sheet_calcs_1')
     wb3s1 = wb3['sheet_calcs_1']
     wb3s1['C1'] = 'square_root'
@@ -286,6 +295,7 @@ def main():
         )
     writer.save()
     print('pd.read_excel')
+    print()
     wb4 = pd.read_excel(
         io='data/file_with_formulae.xlsx',
         sheet_name=None,
