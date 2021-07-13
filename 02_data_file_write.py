@@ -134,7 +134,7 @@ def main():
     print()
     print(wb1df1.dtypes)
     print()
-    wb1df1 = wb1df1.astype(convert_dict)
+    wb1df1 = wb1df1.astype(dtype=convert_dict)
     for column in time_delta_columns:
         wb1df1[column] = pd.to_timedelta(wb1df1[column])
     wb1df1[parse_dates] = wb1df1[parse_dates].astype(dtype='datetime64[ns]')
@@ -152,7 +152,7 @@ def main():
     print()
     print(wb1df2.dtypes)
     print()
-    wb1df2 = wb1df2.astype(convert_dict)
+    wb1df2 = wb1df2.astype(dtype=convert_dict)
     for column in time_delta_columns:
         wb1df2[column] = pd.to_timedelta(wb1df2[column])
     wb1df2[parse_dates] = wb1df2[parse_dates].astype(dtype='datetime64[ns]')
@@ -170,7 +170,7 @@ def main():
     print()
     print(wb1df3.dtypes)
     print()
-    wb1df3 = wb1df3.astype(convert_dict)
+    wb1df3 = wb1df3.astype(dtype=convert_dict)
     for column in time_delta_columns:
         wb1df3[column] = pd.to_timedelta(wb1df3[column])
     wb1df3[parse_dates] = wb1df3[parse_dates].astype(dtype='datetime64[ns]')
@@ -192,7 +192,7 @@ def main():
     print()
     print(wb2df1.dtypes)
     print()
-    wb2df1 = wb2df1.astype(convert_dict)
+    wb2df1 = wb2df1.astype(dtype=convert_dict)
     for column in time_delta_columns:
         wb2df1[column] = pd.to_timedelta(wb2df1[column])
     wb2df1[parse_dates] = wb2df1[parse_dates].astype(dtype='datetime64[ns]')
@@ -203,7 +203,7 @@ def main():
     print()
     print(wb2df2.dtypes)
     print()
-    wb2df2 = wb2df1.astype(convert_dict)
+    wb2df2 = wb2df1.astype(dtype=convert_dict)
     for column in time_delta_columns:
         wb2df2[column] = pd.to_timedelta(wb2df2[column])
     wb2df2[parse_dates] = wb2df2[parse_dates].astype(dtype='datetime64[ns]')
@@ -214,7 +214,7 @@ def main():
     print()
     print(wb2df3.dtypes)
     print()
-    wb2df3 = wb2df3.astype(convert_dict)
+    wb2df3 = wb2df3.astype(dtype=convert_dict)
     for column in time_delta_columns:
         wb2df3[column] = pd.to_timedelta(wb2df3[column])
     wb2df3[parse_dates] = wb2df3[parse_dates].astype(dtype='datetime64[ns]')
